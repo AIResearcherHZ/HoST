@@ -1144,6 +1144,131 @@
     <limit lower="-0.873" upper="0.873" effort="3.0" velocity="15.71"/>
   </joint>
 
+  <!-- Keyframe -->
+  <link name="keyframe_head_link">
+  </link>
+  <joint name="keyframe_head_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0.45" rpy="0 0 0"/>
+    <parent link="torso_link"/>
+    <child link="keyframe_head_link"/>
+  </joint>
+  <link name="keyframe_torso_link">
+  </link>
+  <joint name="keyframe_torso_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    <parent link="torso_link"/>
+    <child link="keyframe_torso_link"/>
+  </joint>
+  <link name="keyframe_pelvis_link">
+  </link>
+  <joint name="keyframe_pelvis_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+    <parent link="pelvis"/>
+    <child link="keyframe_pelvis_link"/>
+  </joint>
+
+  <link name="keyframe_left_collar_link">
+  </link>
+  <joint name="keyframe_left_collar_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <parent link="left_shoulder_pitch_link"/>
+    <child link="keyframe_left_collar_link"/>
+  </joint>
+  <link name="keyframe_right_collar_link">
+  </link>
+  <joint name="keyframe_right_collar_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <parent link="right_shoulder_pitch_link"/>
+    <child link="keyframe_right_collar_link"/>
+  </joint>
+
+  <link name="keyframe_left_shoulder_link">
+  </link>
+  <joint name="keyframe_left_shoulder_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_shoulder_roll_link"/>
+    <child link="keyframe_left_shoulder_link"/>
+  </joint>
+  <link name="keyframe_right_shoulder_link">
+  </link>
+  <joint name="keyframe_right_shoulder_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_shoulder_roll_link"/>
+    <child link="keyframe_right_shoulder_link"/>
+  </joint>
+  <link name="keyframe_left_elbow_link">
+  </link>
+  <joint name="keyframe_left_elbow_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_elbow_link"/>
+    <child link="keyframe_left_elbow_link"/>
+  </joint>
+  <link name="keyframe_right_elbow_link">
+  </link>
+  <joint name="keyframe_right_elbow_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_elbow_link"/>
+    <child link="keyframe_right_elbow_link"/>
+  </joint>
+
+  <link name="keyframe_left_wrist_link">
+  </link>
+  <joint name="keyframe_left_wrist_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_wrist_pitch_link"/>
+    <child link="keyframe_left_wrist_link"/>
+  </joint>
+  <link name="keyframe_right_wrist_link">
+  </link>
+  <joint name="keyframe_right_wrist_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_wrist_pitch_link"/>
+    <child link="keyframe_right_wrist_link"/>
+  </joint>
+
+  <link name="keyframe_left_hip_link">
+  </link>
+  <joint name="keyframe_left_hip_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_hip_roll_link"/>
+    <child link="keyframe_left_hip_link"/>
+  </joint>
+  <link name="keyframe_right_hip_link">
+  </link>
+  <joint name="keyframe_right_hip_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_hip_roll_link"/>
+    <child link="keyframe_right_hip_link"/>
+  </joint>
+  <link name="keyframe_left_knee_link">
+  </link>
+  <joint name="keyframe_left_knee_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_knee_link"/>
+    <child link="keyframe_left_knee_link"/>
+  </joint>
+  <link name="keyframe_right_knee_link">
+  </link>
+  <joint name="keyframe_right_knee_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_knee_link"/>
+    <child link="keyframe_right_knee_link"/>
+  </joint>
+  <link name="keyframe_left_ankle_link">
+  </link>
+  <joint name="keyframe_left_ankle_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_ankle_roll_link"/>
+    <child link="keyframe_left_ankle_link"/>
+  </joint>
+  <link name="keyframe_right_ankle_link">
+  </link>
+  <joint name="keyframe_right_ankle_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_ankle_roll_link"/>
+    <child link="keyframe_right_ankle_link"/>
+  </joint>
+
   <!-- Auxiliary -->
   <link name="auxiliary_right_ankle_roll_link1">
     <visual>

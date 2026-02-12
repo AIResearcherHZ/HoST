@@ -115,8 +115,12 @@ class TaskRegistry():
             log_dir = os.path.join(log_root, datetime.now().strftime('%b%d_%H-%M-%S') + '_' + train_cfg.runner.run_name)
         
         train_cfg_dict = class_to_dict(train_cfg)
+        logger_type = getattr(args, 'logger', 'tensorboard')
+        wandb_project = getattr(args, 'wandb_project', 'HoST')
+        wandb_entity = getattr(args, 'wandb_entity', None)
         if train_cfg.runner_class_name == 'OnPolicyRunner':
-            runner = OnPolicyRunner(env, env_cfg, train_cfg_dict, log_dir, device=args.rl_device)
+            runner = OnPolicyRunner(env, env_cfg, train_cfg_dict, log_dir, device=args.rl_device,
+                                    logger_type=logger_type, wandb_project=wandb_project, wandb_entity=wandb_entity)
         #save resume path before creating a new log_dir
         resume = train_cfg.runner.resume
         if resume:

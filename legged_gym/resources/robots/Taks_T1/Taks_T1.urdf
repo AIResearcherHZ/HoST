@@ -1,14 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <robot name="Taks_T1">
-  <mujoco>
-    <compiler meshdir="meshes" discardvisual="false"/>
-  </mujoco>
-
-  <link name="world"/>
-  <joint name="pelvis" type="floating">
-    <parent link="world"/>
-    <child link="pelvis"/>
-  </joint>
-
   <link name="pelvis">
     <inertial>
       <origin xyz="-0.000276 0.004540 -0.078485" rpy="0 0 0"/>

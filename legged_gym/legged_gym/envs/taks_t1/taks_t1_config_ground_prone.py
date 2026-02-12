@@ -88,11 +88,11 @@ class TaksT1Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'hip': 100,
-                     'knee': 150,
+        stiffness = {'hip': 150,
+                     'knee': 200,
                      'ankle': 40,
-                     'shoulder': 40,
-                     'elbow': 40,
+                     'shoulder': 100,
+                     'elbow': 100,
                      'waist': 150,
                      'wrist': 20,
                      'neck': 10,

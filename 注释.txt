@@ -1,0 +1,124 @@
+================================================================================
+                              仓库与环境准备
+================================================================================
+--- Git 仓库克隆 ---
+git clone https://github.com/AIResearcherHZ/isaaclab.git
+git clone https://github.com/AIResearcherHZ/S2S2R.git
+git clone https://github.com/AIResearcherHZ/whole_body_tracking.git
+git clone https://github.com/AIResearcherHZ/GMR.git
+git clone --recurse-submodules https://github.com/AIResearcherHZ/TWIST2.git
+git clone --recurse-submodules https://github.com/AIResearcherHZ/HOVER
+git clone https://gitee.com/xie-haozheng/atom01_train.git
+git clone --recurse-submodules https://github.com/Roboparty/atom01_deploy.git
+git clone --recurse-submodules https://github.com/eclipse-zenoh/zenoh-cpp.git
+
+--- Clash 安装 ---
+sudo /usr/bin/clash-verge-service-install
+
+--- 服务器 VNC ---
+/opt/TurboVNC/bin/vncserver \
+  -wm xfce \
+  -securitytypes none
+
+================================================================================
+                    G1 训练指令[ground, platform, slope, wall]
+================================================================================
+
+--- 政策培训 (Policy Training) ---
+
+# 在不同地形上训练站立政策
+python legged_gym/legged_gym/scripts/train.py \
+  --task g1_ground \
+  --run_name test_g1 \
+  --seed 42 \
+  --num_envs 4 \
+  --headless \
+  --resume
+
+# 训练结束后，游玩生成的检查点
+python legged_gym/legged_gym/scripts/play.py \
+  --task g1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+--- 政策评估 (Policy Evaluation) ---
+
+# 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
+python legged_gym/legged_gym/scripts/eval/eval_ground.py \
+  --task g1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+--- 运动可视化 (Motion Visualization) ---
+
+# 收集产生的运动
+python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
+  --task g1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+# 绘制运动关键帧的三维轨迹
+python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
+  --terrain ground
+python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
+  --terrain ground
+
+--- 俯卧姿势训练 (Train from Prone Postures) ---
+
+# 从俯卧姿势训练（学到的政策也可以处理侧卧姿势）
+python legged_gym/legged_gym/scripts/train.py \
+  --task g1_ground_prone \
+  --run_name test_g1_ground_prone \
+  --seed 42 \
+  --num_envs 4 \
+  --headless \
+  --resume
+
+
+================================================================================
+                    TAKS_T1 训练指令[ground, platform, slope, wall]
+================================================================================
+
+--- 政策培训 (Policy Training) ---
+
+# 在不同地形上训练站立政策
+python legged_gym/legged_gym/scripts/train.py \
+  --task taks_t1_ground \
+  --run_name test_taks_t1 \
+  --seed 42 \
+  --num_envs 4 \
+  --headless \
+  --resume
+  
+# 训练结束后，游玩生成的检查点
+python legged_gym/legged_gym/scripts/play.py \
+  --task taks_t1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+--- 政策评估 (Policy Evaluation) ---
+
+# 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
+python legged_gym/legged_gym/scripts/eval/eval_ground.py \
+  --task taks_t1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+--- 运动可视化 (Motion Visualization) ---
+
+# 收集产生的运动
+python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
+  --task taks_t1_ground \
+  --checkpoint_path ${/path/to/ckpt.pt}
+
+# 绘制运动关键帧的三维轨迹
+python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
+  --terrain ground
+python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
+  --terrain ground
+
+--- 俯卧姿势训练 (Train from Prone Postures) ---
+
+# 从俯卧姿势训练
+python legged_gym/legged_gym/scripts/train.py \
+  --task taks_t1_ground_prone \
+  --run_name test_taks_t1_ground_prone \
+  --seed 42 \
+  --num_envs 4 \
+  --headless \
+  --resume

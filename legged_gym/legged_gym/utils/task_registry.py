@@ -121,11 +121,14 @@ class TaskRegistry():
         if train_cfg.runner_class_name == 'OnPolicyRunner':
             runner = OnPolicyRunner(env, env_cfg, train_cfg_dict, log_dir, device=args.rl_device,
                                     logger_type=logger_type, wandb_project=wandb_project, wandb_entity=wandb_entity)
-        #save resume path before creating a new log_dir
         resume = train_cfg.runner.resume
+        if not resume and log_root is not None and os.path.isdir(log_root):
+            runs = [r for r in os.listdir(log_root) if os.path.isdir(os.path.join(log_root, r)) and r != 'exported']
+            if len(runs) > 0:
+                resume = True
+                print(f"Auto-resume: found {len(runs)} existing run(s) in {log_root}")
         if resume:
-            # load previously trained model
-            resume_path = get_load_path(log_root, load_run=train_cfg.runner.load_run, checkpoint=train_cfg.runner.checkpoint, checkpoint_path=args.checkpoint_path)
+            resume_path = get_load_path(log_root, load_run=train_cfg.runner.load_run, checkpoint=train_cfg.runner.checkpoint, checkpoint_path=getattr(args, 'checkpoint_path', None))
             print(f"Loading model from: {resume_path}")
             runner.load(resume_path)
         return runner, train_cfg

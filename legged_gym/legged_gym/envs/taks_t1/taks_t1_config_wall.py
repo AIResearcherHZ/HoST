@@ -198,9 +198,9 @@ class TaksT1Cfg( LeggedRobotCfg ):
         fix_base_link = False
 
     class rewards( LeggedRobotCfg.rewards ):
-        soft_dof_pos_limit = 0.9
-        soft_dof_vel_limit = 0.9
-        base_height_target = 0.725
+        soft_dof_pos_limit = 0.99
+        soft_dof_vel_limit = 0.99
+        base_height_target = 0.70
         base_height_sigma = 0.25
         tracking_dof_sigma = 0.25
         only_positive_rewards = False
@@ -208,9 +208,9 @@ class TaksT1Cfg( LeggedRobotCfg ):
         is_gaussian = True
         target_head_height = 1
         target_head_margin = 1
-        target_base_height_phase1 = 0.45
-        target_base_height_phase2 = 0.45
-        target_base_height_phase3 = 0.65
+        target_base_height_phase1 = 0.42
+        target_base_height_phase2 = 0.42
+        target_base_height_phase3 = 0.60
         orientation_threshold = 0.99
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
@@ -230,7 +230,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
         target_head_height = 1
         target_head_margin = 1
         orientation_height_threshold = 0.9
-        target_base_height = 0.45
+        target_base_height = 0.42
 
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2

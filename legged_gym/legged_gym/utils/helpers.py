@@ -152,6 +152,10 @@ def get_args():
     args.sim_device = args.sim_device_type
     if args.sim_device=='cuda':
         args.sim_device += f":{args.sim_device_id}"
+    if args.run_name is None:
+        args.run_name = args.task
+    if args.wandb_project == 'HoST':
+        args.wandb_project = args.task
     return args
 
 def export_policy_as_jit(actor_critic, path):

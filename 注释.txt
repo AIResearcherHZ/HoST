@@ -29,30 +29,28 @@ sudo /usr/bin/clash-verge-service-install
 # 在不同地形上训练站立政策
 python legged_gym/legged_gym/scripts/train.py \
   --task g1_ground \
-  --run_name test_g1 \
   --seed 42 \
   --num_envs 4 \
-  --headless \
-  --resume
+  --headless
+
+# TensorBoard 查看训练曲线
+tensorboard --logdir legged_gym/logs/g1_ground --port 6006
 
 # 训练结束后，游玩生成的检查点
 python legged_gym/legged_gym/scripts/play.py \
-  --task g1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task g1_ground
 
 --- 政策评估 (Policy Evaluation) ---
 
 # 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
 python legged_gym/legged_gym/scripts/eval/eval_ground.py \
-  --task g1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task g1_ground
 
 --- 运动可视化 (Motion Visualization) ---
 
 # 收集产生的运动
 python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
-  --task g1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task g1_ground
 
 # 绘制运动关键帧的三维轨迹
 python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
@@ -65,11 +63,9 @@ python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
 # 从俯卧姿势训练（学到的政策也可以处理侧卧姿势）
 python legged_gym/legged_gym/scripts/train.py \
   --task g1_ground_prone \
-  --run_name test_g1_ground_prone \
   --seed 42 \
   --num_envs 4 \
-  --headless \
-  --resume
+  --headless
 
 
 ================================================================================
@@ -81,30 +77,28 @@ python legged_gym/legged_gym/scripts/train.py \
 # 在不同地形上训练站立政策
 python legged_gym/legged_gym/scripts/train.py \
   --task taks_t1_ground \
-  --run_name test_taks_t1 \
   --seed 42 \
   --num_envs 4 \
-  --headless \
-  --resume
+  --headless
+
+# TensorBoard 查看训练曲线
+tensorboard --logdir legged_gym/logs/taks_t1_ground --port 6006
   
 # 训练结束后，游玩生成的检查点
 python legged_gym/legged_gym/scripts/play.py \
-  --task taks_t1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task taks_t1_ground
 
 --- 政策评估 (Policy Evaluation) ---
 
 # 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
 python legged_gym/legged_gym/scripts/eval/eval_ground.py \
-  --task taks_t1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task taks_t1_ground
 
 --- 运动可视化 (Motion Visualization) ---
 
 # 收集产生的运动
 python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
-  --task taks_t1_ground \
-  --checkpoint_path ${/path/to/ckpt.pt}
+  --task taks_t1_ground
 
 # 绘制运动关键帧的三维轨迹
 python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
@@ -117,8 +111,83 @@ python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
 # 从俯卧姿势训练
 python legged_gym/legged_gym/scripts/train.py \
   --task taks_t1_ground_prone \
-  --run_name test_taks_t1_ground_prone \
   --seed 42 \
   --num_envs 4 \
-  --headless \
-  --resume
+  --headless
+
+
+================================================================================
+                    Logger 选项 (wandb / tensorboard)
+================================================================================
+# 默认tensorboard，run_name和wandb_project不指定时自动取task名称
+# resume和checkpoint_path会自动查找最新的run和模型，无需手动指定
+python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground
+# 使用wandb
+python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb
+# 自定义wandb项目名和entity
+python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb --wandb_project MyProject --wandb_entity my_team
+
+
+================================================================================
+              适配新机器人的经验法则 (G1→Taks_T1 参数推导)
+================================================================================
+
+--- 0. 官方指南原文 ---
+  Keyframes: 建议添加与G1相同的keyframe（包括脚踝周围的关键点）用于奖励计算
+  Pulling force: ~60% 机器人重力。注意URDF中有两个torso link（一真一虚），力会×2
+  Height for curriculum: ~70% 机器人站立高度
+  Height for stage division: ~35% 用于stage 1/2, ~70% 用于stage 3
+  Height for reward: ~75% 用于target_head_height
+  Joint deviation rewards: 轻量机器人需要更窄的期望关节角范围
+  Reward group weights: 提高style权重可优先优化动作风格
+
+--- 1. G1 物理参数 (从g1_23dof.urdf计算) ---
+  腿链z偏移(pelvis→ankle): 0.1027+0.030+0.124+0.177+0.300+0.018 = 0.752m
+  pelvis→torso(waist_yaw): z=0.054m
+  keyframe_head偏移: torso_link + z=0.45m
+  站立pelvis高度: ~0.75m
+  站立head高度(相对脚底): 0.75+0.054+0.45 = 1.254m
+  总质量: ~35kg (pelvis 3.8 + legs 14.4 + torso 8.6 + arms 6.1 + head 1.0 + misc 1.1)
+
+--- 2. G1 config参数验证 (g1_config_ground.py) ---
+  force = 100        → 60%×35×9.81/2 = 103N ✓
+  threshold_height = 0.9   → 72% of 1.254m (curriculum head高度阈值) ✓
+  target_head_height = 1.0 → 80% of 1.254m (head奖励目标) ✓
+  phase1/2 = 0.45    → 60% of 站立pelvis高度0.75m ✓
+  phase3 = 0.65      → 87% of 站立pelvis高度0.75m ✓
+  base_height_target = 0.75 → 站立pelvis高度 ✓
+
+--- 3. Taks_T1 物理参数 (从Taks_T1.urdf计算) ---
+  腿链z偏移(pelvis→ankle): 0.087+0.042+0.109+0.167+0.299+0 = 0.704m
+  pelvis→torso(3关节腰): z=0+0.051+0.080 = 0.131m
+  keyframe_head偏移: torso_link + z=0.45m (与G1相同)
+  站立pelvis高度: ~0.70m
+  站立head高度(相对脚底): 0.70+0.131+0.45 = 1.281m
+  总质量: ~25kg (pelvis 3.3 + legs 10.1 + waist 4.4 + torso 2.0 + arms 7.0 + neck ~1)
+
+--- 4. Taks_T1 config参数推导 ---
+  force = 80         → 60%×25×9.81/2 = 74N, 取80合理 ✓
+  threshold_height = 0.9   → 70% of 1.281m = 0.90 ✓ (无需改)
+  target_head_height = 1.0 → 78% of 1.281m ✓ (无需改)
+  phase1/2 = 0.42    → 60% of 站立pelvis高度0.70m (从0.45改为0.42)
+  phase3 = 0.60      → 86% of 站立pelvis高度0.70m (从0.65改为0.60)
+  base_height_target = 0.70 → 站立pelvis高度 (从0.75改为0.70)
+
+--- 5. Keyframe验证 (Taks_T1.urdf) ---
+  ✓ keyframe_head_link     → torso_link + z=0.45
+  ✓ keyframe_torso_link    → torso_link + z=0.2
+  ✓ keyframe_pelvis_link   → pelvis + z=-0.075
+  ✓ keyframe_left/right_collar_link  → shoulder_pitch + z=0.02
+  ✓ keyframe_left/right_shoulder/elbow/wrist/hip/knee/ankle_link → 均已添加
+  ✓ auxiliary ankle links  → 4个脚踝辅助球体点(用于脚底平面检测)
+
+--- 6. PD增益对比 ---
+  关节      G1 Kp    T1 Kp    G1 Kd    T1 Kd
+  hip       150      150      4        3.3
+  knee      200      200      6        5
+  ankle     40       40       2        2
+  shoulder  100      100      4        2
+  elbow     100      100      4        2
+  waist     100      150      4        5
+  wrist     100      20       4        1
+  neck      -        10       -        0.25

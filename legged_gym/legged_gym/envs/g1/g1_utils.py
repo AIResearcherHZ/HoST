@@ -258,9 +258,9 @@ def tolerance(x, bounds=(0.0, 0.0), margin=0.0, value_at_margin=0.1):
 
     in_bounds = torch.logical_and(lower <= x, x <= upper)
     if margin == 0:
-        value = torch.where(in_bounds, 1.0, 0)
+        value = torch.where(in_bounds, torch.ones_like(x), torch.zeros_like(x))
     else:
         d = torch.where(x < lower, lower - x, x - upper) / margin
-        value = torch.where(in_bounds, 1.0, sigmoid(d.double(), value_at_margin))
+        value = torch.where(in_bounds, torch.ones_like(d), sigmoid(d, value_at_margin))
     
     return value

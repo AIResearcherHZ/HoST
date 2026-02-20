@@ -101,36 +101,14 @@ class LeggedRobot(BaseTask):
                 if sim_time-elapsed_time>0:
                     time.sleep(sim_time-elapsed_time)
             
-            # print(self.projected_gravity[:, 2] < -0.8)
+            self._force_buf.zero_()
             if self.cfg.domain_rand.pull_force:
-                force_tensor = torch.zeros([self.num_envs, self.num_bodies, 3], device=self.device)
-                force_tensor[:, self.base_indices, 2] = self.force 
-                # import ipdb; ipdb.set_trace()
-                # force_tensor[:, self.base_indices, :] =  self.force.unsqueeze(1) * (2 * torch.rand_like(force_tensor[:, self.base_indices, :]) - 1) 
-
-                # import ipdb; ipdb.set_trace()
-                force_tensor *= (self.real_episode_length_buf.unsqueeze(1) > self.unactuated_time).unsqueeze(1)
-                force_tensor *= (self.projected_gravity[:, 2] < -0.8).unsqueeze(1).unsqueeze(1)
-                # force_tensor = gymtorch.unwrap_tensor(force_tensor)
-                # self.gym.apply_rigid_body_force_tensors(self.sim, force_tensor)
-
-            # pull back
-            force_tensor_back = torch.zeros([self.num_envs, self.num_bodies, 3], device=self.device)
-            force_tensor_back[:, self.base_indices, 0] = -50
-            # import ipdb; ipdb.set_trace()
-            # force_tensor[:, self.base_indices, :] =  self.force.unsqueeze(1) * (2 * torch.rand_like(force_tensor[:, self.base_indices, :]) - 1) 
-
-            # import ipdb; ipdb.set_trace()
-            force_tensor_back *= (self.real_episode_length_buf.unsqueeze(1) < self.unactuated_time).unsqueeze(1)
-            # force_tensor *= (self.projected_gravity[:, 2] < -0.8).unsqueeze(1).unsqueeze(1)
-            # force_tensor_back = gymtorch.unwrap_tensor(force_tensor_back)
-            
-            if self.cfg.domain_rand.pull_force:
-                force_tensor = force_tensor + force_tensor_back
-            else:
-                force_tensor = force_tensor_back
-            force_tensor = gymtorch.unwrap_tensor(force_tensor)
-            self.gym.apply_rigid_body_force_tensors(self.sim, force_tensor)
+                self._force_buf[:, self.base_indices, 2] = self.force
+                self._force_buf *= (self.real_episode_length_buf.unsqueeze(1) > self.unactuated_time).unsqueeze(1)
+                self._force_buf *= (self.projected_gravity[:, 2] < -0.8).unsqueeze(1).unsqueeze(1)
+            back_mask = (self.real_episode_length_buf < self.unactuated_time).float().unsqueeze(1)
+            self._force_buf[:, self.base_indices, 0] += -50 * back_mask
+            self.gym.apply_rigid_body_force_tensors(self.sim, gymtorch.unwrap_tensor(self._force_buf))
 
             if self.device == 'cpu':
                 self.gym.fetch_results(self.sim, True)
@@ -343,7 +321,8 @@ class LeggedRobot(BaseTask):
 
         current_obs *= self.real_episode_length_buf.unsqueeze(1) > self.unactuated_time
 
-        self.obs_buf = torch.cat((self.obs_buf[:, self.num_one_step_obs:self.actor_proprioceptive_obs_length], current_obs), dim=-1)
+        self.obs_buf[:, :-self.num_one_step_obs] = self.obs_buf[:, self.num_one_step_obs:self.actor_proprioceptive_obs_length].clone()
+        self.obs_buf[:, -self.num_one_step_obs:] = current_obs
 
     def compute_motions(self):
         # resample motions
@@ -543,9 +522,10 @@ class LeggedRobot(BaseTask):
         # self.joint_pos_target = self.dof_pos + actions_scaled
 
         if self.cfg.domain_rand.delay:
-            # print('heare')
-            self.delay_buffer = torch.concat((self.delay_buffer[1:], actions_scaled.unsqueeze(0)), dim=0)
-            self.joint_pos_target = self.dof_pos + self.delay_buffer[self.delay_idx, torch.arange(len(self.delay_idx)), :]
+            self.delay_buffer[self.delay_ptr] = actions_scaled
+            read_idx = (self.delay_ptr + self.delay_idx + 1) % self.cfg.domain_rand.max_delay_timesteps
+            self.joint_pos_target = self.dof_pos + self.delay_buffer[read_idx, self._env_ids_arange, :]
+            self.delay_ptr = (self.delay_ptr + 1) % self.cfg.domain_rand.max_delay_timesteps
         else:
             self.joint_pos_target = self.dof_pos + actions_scaled
 
@@ -792,6 +772,9 @@ class LeggedRobot(BaseTask):
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
         if self.cfg.domain_rand.delay:
             self.delay_idx = torch.randint(low=0, high=self.cfg.domain_rand.max_delay_timesteps, size=(self.num_envs,), device=self.device)
+        self.delay_ptr = 0
+        self._force_buf = torch.zeros(self.num_envs, self.num_bodies, 3, dtype=torch.float, device=self.device, requires_grad=False)
+        self._env_ids_arange = torch.arange(self.num_envs, device=self.device)
 
     def _prepare_reward_function(self):
         """ Prepares a list of reward functions, whcih will be called to compute the total reward.

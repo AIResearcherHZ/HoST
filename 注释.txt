@@ -20,6 +20,9 @@ sudo /usr/bin/clash-verge-service-install
   -wm xfce \
   -securitytypes none
 
+-- 临时修改 ---
+sudo nano /opt/conda/envs/twist2/lib/python3.8/site-packages/easy-install.pth
+
 ================================================================================
                     G1 训练指令[ground, platform, slope, wall]
 ================================================================================
@@ -27,44 +30,44 @@ sudo /usr/bin/clash-verge-service-install
 --- 政策培训 (Policy Training) ---
 
 # 在不同地形上训练站立政策
-python legged_gym/legged_gym/scripts/train.py \
+./run.sh python legged_gym/legged_gym/scripts/train.py \
   --task g1_ground \
   --seed 42 \
-  --num_envs 4 \
+  --num_envs 10000 \
   --headless
 
 # TensorBoard 查看训练曲线
 tensorboard --logdir legged_gym/logs/g1_ground --port 6006
 
 # 训练结束后，游玩生成的检查点
-python legged_gym/legged_gym/scripts/play.py \
+./run.sh python legged_gym/legged_gym/scripts/play.py \
   --task g1_ground
 
 --- 政策评估 (Policy Evaluation) ---
 
 # 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
-python legged_gym/legged_gym/scripts/eval/eval_ground.py \
+./run.sh python legged_gym/legged_gym/scripts/eval/eval_ground.py \
   --task g1_ground
 
 --- 运动可视化 (Motion Visualization) ---
 
 # 收集产生的运动
-python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
   --task g1_ground
 
 # 绘制运动关键帧的三维轨迹
-python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
   --terrain ground
-python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
   --terrain ground
 
 --- 俯卧姿势训练 (Train from Prone Postures) ---
 
 # 从俯卧姿势训练（学到的政策也可以处理侧卧姿势）
-python legged_gym/legged_gym/scripts/train.py \
+./run.sh python legged_gym/legged_gym/scripts/train.py \
   --task g1_ground_prone \
   --seed 42 \
-  --num_envs 4 \
+  --num_envs 10000 \
   --headless
 
 
@@ -75,44 +78,45 @@ python legged_gym/legged_gym/scripts/train.py \
 --- 政策培训 (Policy Training) ---
 
 # 在不同地形上训练站立政策
-python legged_gym/legged_gym/scripts/train.py \
+./run.sh python legged_gym/legged_gym/scripts/train.py \
   --task taks_t1_ground \
   --seed 42 \
-  --num_envs 4 \
-  --headless
+  --num_envs 10000 \
+  --headless \
+  --logger wandb
 
 # TensorBoard 查看训练曲线
 tensorboard --logdir legged_gym/logs/taks_t1_ground --port 6006
   
 # 训练结束后，游玩生成的检查点
-python legged_gym/legged_gym/scripts/play.py \
+./run.sh python legged_gym/legged_gym/scripts/play.py \
   --task taks_t1_ground
 
 --- 政策评估 (Policy Evaluation) ---
 
 # 记录成功率、脚步移动距离、动作平滑度和消耗能量（评估过程中应用领域随机化）
-python legged_gym/legged_gym/scripts/eval/eval_ground.py \
+./run.sh python legged_gym/legged_gym/scripts/eval/eval_ground.py \
   --task taks_t1_ground
 
 --- 运动可视化 (Motion Visualization) ---
 
 # 收集产生的运动
-python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/motion_collection.py \
   --task taks_t1_ground
 
 # 绘制运动关键帧的三维轨迹
-python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/trajectory_hands_feet.py \
   --terrain ground
-python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
+./run.sh python legged_gym/legged_gym/scripts/visualization/trajectory_head_pelvis.py \
   --terrain ground
 
 --- 俯卧姿势训练 (Train from Prone Postures) ---
 
 # 从俯卧姿势训练
-python legged_gym/legged_gym/scripts/train.py \
+./run.sh python legged_gym/legged_gym/scripts/train.py \
   --task taks_t1_ground_prone \
   --seed 42 \
-  --num_envs 4 \
+  --num_envs 10000 \
   --headless
 
 
@@ -121,11 +125,11 @@ python legged_gym/legged_gym/scripts/train.py \
 ================================================================================
 # 默认tensorboard，run_name和wandb_project不指定时自动取task名称
 # resume和checkpoint_path会自动查找最新的run和模型，无需手动指定
-python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground
+./run.sh python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground
 # 使用wandb
-python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb
+./run.sh python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb
 # 自定义wandb项目名和entity
-python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb --wandb_project MyProject --wandb_entity my_team
+./run.sh python legged_gym/legged_gym/scripts/train.py --task taks_t1_ground --logger wandb --wandb_project MyProject --wandb_entity my_team
 
 
 ================================================================================

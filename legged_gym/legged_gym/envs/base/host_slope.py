@@ -266,6 +266,10 @@ class LeggedRobot(BaseTask):
             name = self.constraint_names[i]
             reward_group_name = name.split('_')[0]
             rew = self.constraints[i]() * self.constraints_scales[name]
+            if len(rew.shape) == 2 and rew.shape[1] == 1:
+                rew = rew.squeeze(1)
+            elif len(rew.shape) > 1:
+                rew = rew.sum(dim=-1)
             task_group_index = self.reward_groups.index(reward_group_name)
 
             # print(name, self.constraints[i]().floatmean())
@@ -1054,8 +1058,12 @@ class LeggedRobot(BaseTask):
         for i in range(len(self.cfg.asset.right_arm_joints)):
             self.right_arm_joint_indices[i] = self.dof_names.index(self.cfg.asset.right_arm_joints[i])
 
+        self.neck_joint_indices = torch.zeros(len(self.cfg.asset.neck_joints), dtype=torch.long, device=self.device, requires_grad=False)
+        for i in range(len(self.cfg.asset.neck_joints)):
+            self.neck_joint_indices[i] = self.dof_names.index(self.cfg.asset.neck_joints[i])
+
         # import ipdb; ipdb.set_trace()
-        self.upper_body_joint_indices = torch.cat([self.right_arm_joint_indices, self.left_arm_joint_indices, self.waist_joint_indices])
+        self.upper_body_joint_indices = torch.cat([self.right_arm_joint_indices, self.left_arm_joint_indices, self.waist_joint_indices, self.neck_joint_indices])
         self.lower_body_joint_indices = torch.cat([self.all_hip_joint_indices, self.knee_joint_indices, self.ankle_joint_indices])
 
 
@@ -1530,7 +1538,7 @@ class LeggedRobot(BaseTask):
         # import ipdb; ipdb.set_trace()
         wrist_dof = self.dof_pos[:, self.waist_joint_indices]
         reward = (torch.abs(wrist_dof) > 1.4).float()
-        return reward.squeeze(1)
+        return reward.sum(dim=-1)
 
     def _reward_hip_yaw_deviation(self):
         # import ipdb; ipdb.set_trace()
@@ -1693,6 +1701,11 @@ class LeggedRobot(BaseTask):
         # reward = (torch.max(torch.abs(self.dof_pos[:, self.knee_joint_indices]), dim=-1)[0] > 2.65) | (torch.min(torch.abs(self.dof_pos[:, self.knee_joint_indices]), dim=-1)[0] > 2.55)
         reward = (self.dof_pos[:, self.shoulder_roll_joint_indices[0]] < 0.15) | (self.dof_pos[:, self.shoulder_roll_joint_indices[1]] > -0.15)
         return reward
+
+    def _reward_neck_deviation(self):
+        neck_dof = self.dof_pos[:, self.neck_joint_indices]
+        reward = (torch.abs(neck_dof) > 0.1).float()
+        return reward.sum(dim=-1)
 
 
     def _reward_feet_parallel(self):

@@ -343,7 +343,7 @@ class G1CfgPPO( LeggedRobotCfgPPO ):
     
     class runner( LeggedRobotCfgPPO.runner ):
         run_name = ''
-        save_interval = 500 # check for potential saves every this many iterations
+        save_interval = 50 # check for potential saves every this many iterations
         experiment_name = 'g1_wall'
         algorithm_class_name = 'PPO'
         init_at_random_ep_len = True

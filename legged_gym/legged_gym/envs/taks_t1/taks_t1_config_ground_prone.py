@@ -6,32 +6,32 @@ class TaksT1Cfg( LeggedRobotCfg ):
         pos = [0.0, 0.0, 0.5] # x,y,z [m]
         rot = [0.0, 1, 0, 1.0] # x,y,z,w [quat]
         target_joint_angles = {
-           'left_hip_pitch_joint' : -0.1,
+           'left_hip_pitch_joint' : -0.14,
            'left_hip_roll_joint' : 0,
            'left_hip_yaw_joint' : 0.,
-           'left_knee_joint' : 0.3,
-           'left_ankle_pitch_joint' : -0.2,
+           'left_knee_joint' : 0.36,
+           'left_ankle_pitch_joint' : -0.20,
            'left_ankle_roll_joint' : 0,
-           'right_hip_pitch_joint' : -0.1,
+           'right_hip_pitch_joint' : -0.14,
            'right_hip_roll_joint' : 0,
            'right_hip_yaw_joint' : 0.,
-           'right_knee_joint' : 0.3,
-           'right_ankle_pitch_joint': -0.2,
+           'right_knee_joint' : 0.36,
+           'right_ankle_pitch_joint': -0.20,
            'right_ankle_roll_joint' : 0,
            'waist_yaw_joint' : 0.0,
            'waist_roll_joint' : 0.0,
            'waist_pitch_joint' : 0.0,
-           'left_shoulder_pitch_joint' : 0.0,
-           'left_shoulder_roll_joint' : 0.3,
+           'left_shoulder_pitch_joint' : 0.16,
+           'left_shoulder_roll_joint' : 0.16,
            'left_shoulder_yaw_joint' : 0.0,
-           'left_elbow_joint' : 0,
+           'left_elbow_joint' : 1.10,
            'left_wrist_roll_joint' : 0,
            'left_wrist_yaw_joint' : 0,
            'left_wrist_pitch_joint' : 0,
-           'right_shoulder_pitch_joint' : 0,
-           'right_shoulder_roll_joint' : -0.3,
+           'right_shoulder_pitch_joint' : 0.16,
+           'right_shoulder_roll_joint' : -0.16,
            'right_shoulder_yaw_joint' : 0.0,
-           'right_elbow_joint' : 0,
+           'right_elbow_joint' : 1.10,
            'right_wrist_roll_joint' : 0,
            'right_wrist_yaw_joint' : 0,
            'right_wrist_pitch_joint' : 0,
@@ -42,32 +42,32 @@ class TaksT1Cfg( LeggedRobotCfg ):
 
 
         default_joint_angles = {
-           'left_hip_pitch_joint' : -0.1,
+           'left_hip_pitch_joint' : -0.14,
            'left_hip_roll_joint' : 0,
            'left_hip_yaw_joint' : 0.,
-           'left_knee_joint' : 0.3,
-           'left_ankle_pitch_joint' : -0.2,
+           'left_knee_joint' : 0.36,
+           'left_ankle_pitch_joint' : -0.20,
            'left_ankle_roll_joint' : 0,
-           'right_hip_pitch_joint' : -0.1,
+           'right_hip_pitch_joint' : -0.14,
            'right_hip_roll_joint' : 0,
            'right_hip_yaw_joint' : 0.,
-           'right_knee_joint' : 0.3,
-           'right_ankle_pitch_joint': -0.2,
+           'right_knee_joint' : 0.36,
+           'right_ankle_pitch_joint': -0.20,
            'right_ankle_roll_joint' : 0,
            'waist_yaw_joint' : 0.0,
            'waist_roll_joint' : 0.0,
            'waist_pitch_joint' : 0.0,
-           'left_shoulder_pitch_joint' : 0,
-           'left_shoulder_roll_joint' : 0.0,
+           'left_shoulder_pitch_joint' : 0.16,
+           'left_shoulder_roll_joint' : 0.16,
            'left_shoulder_yaw_joint' : 0.0,
-           'left_elbow_joint' : 0.8,
+           'left_elbow_joint' : 1.10,
            'left_wrist_roll_joint' : 0,
            'left_wrist_yaw_joint' : 0,
            'left_wrist_pitch_joint' : 0,
-           'right_shoulder_pitch_joint' : 0,
-           'right_shoulder_roll_joint' : 0.0,
+           'right_shoulder_pitch_joint' : 0.16,
+           'right_shoulder_roll_joint' : -0.16,
            'right_shoulder_yaw_joint' : 0.0,
-           'right_elbow_joint' : 0.8,
+           'right_elbow_joint' : 1.10,
            'right_wrist_roll_joint' : 0,
            'right_wrist_yaw_joint' : 0,
            'right_wrist_pitch_joint' : 0,
@@ -172,7 +172,8 @@ class TaksT1Cfg( LeggedRobotCfg ):
 
         left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_joint', 'left_wrist_roll_joint', 'left_wrist_yaw_joint', 'left_wrist_pitch_joint']
         right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_joint', 'right_wrist_roll_joint', 'right_wrist_yaw_joint', 'right_wrist_pitch_joint']
-        waist_joints = ["waist_yaw_joint"]
+        waist_joints = ["waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint"]
+        neck_joints = ['neck_yaw_joint', 'neck_roll_joint', 'neck_pitch_joint']
         knee_joints = ['left_knee_joint', 'right_knee_joint']
         ankle_joints = [ 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint']
 
@@ -259,6 +260,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
             style_hip_roll_deviation = -10
             style_hip_pitch_deviation = -10
             style_shoulder_roll_deviation = -2.5
+            style_neck_deviation = -10
             style_left_foot_displacement = 2.5
             style_right_foot_displacement = 2.5
             style_knee_deviation = -0.25
@@ -271,6 +273,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
             target_lin_vel_xy = 10
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
+            target_target_lower_dof_pos = 10
             target_lower_body_deviation = 10
             target_target_orientation = 10
             target_target_base_height = 10
@@ -360,8 +363,8 @@ class TaksT1CfgPPO( LeggedRobotCfgPPO ):
     
     class runner( LeggedRobotCfgPPO.runner ):
         run_name = ''
-        save_interval = 500
+        save_interval = 50
         experiment_name = 'taks_t1_ground_prone'
         algorithm_class_name = 'PPO'
         init_at_random_ep_len = True
-        max_iterations = 12000
+        max_iterations = 5000

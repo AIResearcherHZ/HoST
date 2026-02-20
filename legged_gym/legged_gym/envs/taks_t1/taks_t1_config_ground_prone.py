@@ -283,13 +283,13 @@ class TaksT1Cfg( LeggedRobotCfg ):
         actuation_offset_range = [-0.05, 0.05]
 
         randomize_motor_strength = use_random
-        motor_strength_range = [0.9, 1.1]
+        motor_strength_range = [0.8, 1.2]
 
         randomize_payload_mass = use_random
-        payload_mass_range = [-2, 5]
+        payload_mass_range = [-1, 3]
 
         randomize_com_displacement = use_random
-        com_displacement_range = [-0.03, 0.03]
+        com_displacement_range = [-0.05, 0.05]
 
         randomize_link_mass = use_random
         link_mass_range = [0.8, 1.2]

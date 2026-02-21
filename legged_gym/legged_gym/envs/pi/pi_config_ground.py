@@ -240,7 +240,7 @@ class PiCfg( LeggedRobotCfg ):
         payload_mass_range = [-2, 3]
 
         randomize_com_displacement = use_random
-        com_displacement_range = [-0.05, 0.05]
+        com_displacement_range = [-0.03, 0.03]
 
         randomize_link_mass = use_random
         link_mass_range = [0.8, 1.2]

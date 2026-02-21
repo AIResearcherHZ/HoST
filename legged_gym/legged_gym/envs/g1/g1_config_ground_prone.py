@@ -276,7 +276,7 @@ class G1Cfg( LeggedRobotCfg ):
         payload_mass_range = [-2, 5]
 
         randomize_com_displacement = use_random
-        com_displacement_range = [-0.05, 0.05]
+        com_displacement_range = [-0.03, 0.03]
 
         randomize_link_mass = use_random
         link_mass_range = [0.8, 1.2]
@@ -288,10 +288,10 @@ class G1Cfg( LeggedRobotCfg ):
         restitution_range = [0.0, 1.0]
         
         randomize_kp = use_random
-        kp_range = [0.85, 1.25]
+        kp_range = [0.8, 1.2]
         
         randomize_kd = use_random
-        kd_range = [0.85, 1.25]
+        kd_range = [0.8, 1.2]
         
         randomize_initial_joint_pos = True
         initial_joint_pos_scale = [0.9, 1.1]

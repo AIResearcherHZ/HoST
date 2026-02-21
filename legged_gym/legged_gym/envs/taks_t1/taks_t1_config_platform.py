@@ -261,7 +261,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
             style_lower_body_deviation = 1
             style_style_ang_vel_xy = 1
             style_shoulder_roll_deviation = -2.5
-            style_neck_deviation = -10
+            style_neck_deviation = -1.0
 
             # post-task reward
             target_ang_vel_xy = 10

@@ -262,7 +262,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
             style_feet_stumble = -25
             style_style_ang_vel_xy = 1
             style_shoulder_roll_deviation = -2.5
-            style_neck_deviation = -10
+            style_neck_deviation = -1.0
 
             ## for standup
             target_ang_vel_xy = 10

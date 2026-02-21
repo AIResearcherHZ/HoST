@@ -90,7 +90,8 @@ tensorboard --logdir legged_gym/logs/taks_t1_ground --port 6006
   
 # 训练结束后，游玩生成的检查点
 ./run.sh python legged_gym/legged_gym/scripts/play.py \
-  --task taks_t1_ground
+  --task taks_t1_ground \
+  --num_envs 10
 
 --- 政策评估 (Policy Evaluation) ---
 

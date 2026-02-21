@@ -250,7 +250,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
             style_hip_yaw_deviation = -10
             style_hip_roll_deviation = -10
             style_shoulder_roll_deviation = -2.5
-            style_neck_deviation = -10
+            style_neck_deviation = -1.0
             style_left_foot_displacement = 2.5
             style_right_foot_displacement = 2.5
             style_knee_deviation = -0.25

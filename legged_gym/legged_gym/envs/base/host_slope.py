@@ -1704,7 +1704,7 @@ class LeggedRobot(BaseTask):
 
     def _reward_neck_deviation(self):
         neck_dof = self.dof_pos[:, self.neck_joint_indices]
-        reward = (torch.abs(neck_dof) > 0.1).float()
+        reward = (torch.abs(neck_dof) > 0.3).float()
         return reward.sum(dim=-1)
 
 

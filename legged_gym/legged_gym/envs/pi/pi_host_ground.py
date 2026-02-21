@@ -1232,12 +1232,6 @@ class LeggedRobot_Pi(BaseTask):
         base_height = self.root_states[:, 2]
         standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         return torch.exp(torch.abs(base_height - self.cfg.rewards.base_height_target) * - 20) * standup
-    def _reward_target_lower_dof_pos(self):
-        mse = torch.sum(torch.square(self.dof_pos[:, :] - self.target_dof_pos[:, :]), dim=-1)
-        standup =self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
-        reward = torch.exp(mse * self.cfg.rewards.target_dof_pos_sigma) 
-        reward = reward * standup
-        return reward
     def _reward_target_upper_dof_pos(self):
         # if self.is_gaussian:
         mse = torch.sum(torch.square(self.dof_pos[:, self.upper_body_joint_indices] - self.target_dof_pos[:, self.upper_body_joint_indices]), dim=-1)

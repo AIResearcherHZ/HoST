@@ -264,7 +264,6 @@ class G1Cfg( LeggedRobotCfg ):
             # target_tracking_ang_vel = 10
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
-            # target_target_lower_dof_pos = 10
             # target_lower_body_deviation = 2.5
             # target_lower_body_var = 10
             # target_upper_body_var = 10
@@ -280,7 +279,6 @@ class G1Cfg( LeggedRobotCfg ):
             # target_tracking_ang_vel = 2.5
             # # target_feet_height_var = 2.5
             # target_target_upper_dof_pos = 10
-            # # target_target_lower_dof_pos = 10
             # # target_lower_body_var = 10
             # # target_upper_body_var = 10
             # target_target_orientation = 10

@@ -266,10 +266,6 @@ class LeggedRobot(BaseTask):
             name = self.constraint_names[i]
             reward_group_name = name.split('_')[0]
             rew = self.constraints[i]() * self.constraints_scales[name]
-            if len(rew.shape) == 2 and rew.shape[1] == 1:
-                rew = rew.squeeze(1)
-            elif len(rew.shape) > 1:
-                rew = rew.sum(dim=-1)
             task_group_index = self.reward_groups.index(reward_group_name)
 
             # print(name, self.constraints[i]().floatmean())
@@ -1308,13 +1304,6 @@ class LeggedRobot(BaseTask):
         mse = torch.sum(torch.square(self.dof_pos[:, self.upper_body_joint_indices] - self.target_dof_pos[:, self.upper_body_joint_indices]), dim=-1)
         standup =self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         reward = torch.exp(mse * self.cfg.rewards.target_dof_pos_sigma) 
-        reward = reward * standup
-        return reward
-
-    def _reward_target_lower_dof_pos(self):
-        mse = torch.sum(torch.square(self.dof_pos[:, self.lower_body_joint_indices] - self.target_dof_pos[:, self.lower_body_joint_indices]), dim=-1)
-        standup = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
-        reward = torch.exp(mse * self.cfg.rewards.target_dof_pos_sigma)
         reward = reward * standup
         return reward
 

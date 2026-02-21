@@ -239,6 +239,9 @@ class TaksT1Cfg( LeggedRobotCfg ):
         target_dof_pos_sigma = -0.1
         post_task = False
         
+        reward_groups = ['task', 'regu', 'style', 'target']
+        num_reward_groups = len(reward_groups)
+        
         class scales:
             regu_dof_acc = -2.5e-7
             regu_action_rate = -0.01

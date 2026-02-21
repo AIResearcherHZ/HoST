@@ -288,6 +288,10 @@ class LeggedRobot(BaseTask):
             name = self.constraint_names[i]
             reward_group_name = name.split('_')[0]
             rew = self.constraints[i]() * self.constraints_scales[name]
+            if len(rew.shape) == 2 and rew.shape[1] == 1:
+                rew = rew.squeeze(1)
+            elif len(rew.shape) > 1:
+                rew = rew.sum(dim=-1)
             task_group_index = self.reward_groups.index(reward_group_name)
 
             # print(name, self.constraints[i]().floatmean())

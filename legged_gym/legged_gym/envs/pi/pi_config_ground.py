@@ -126,6 +126,7 @@ class PiCfg( LeggedRobotCfg ):
         left_arm_joints = ['l_shoulder_pitch_joint', 'l_shoulder_roll_joint', 'l_shoulder_yaw_joint', 'l_elbow_joint', 'l_wrist_roll_joint']
         right_arm_joints = ['r_shoulder_pitch_joint', 'r_shoulder_roll_joint', 'r_shoulder_yaw_joint', 'r_elbow_joint', 'r_wrist_roll_joint']
         waist_joints = ["waist_yaw_joint"]
+        neck_joints = []
         knee_joints = ['l_calf_joint', 'r_calf_joint']
         ankle_joints = [ 'l_ankle_pitch_joint', 'l_ankle_roll_joint', 'r_ankle_pitch_joint', 'r_ankle_roll_joint']
 

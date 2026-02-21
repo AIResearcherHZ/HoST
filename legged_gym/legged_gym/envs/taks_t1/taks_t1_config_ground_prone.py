@@ -40,7 +40,6 @@ class TaksT1Cfg( LeggedRobotCfg ):
            'neck_pitch_joint' : 0,
         }
 
-
         default_joint_angles = {
            'left_hip_pitch_joint' : -0.14,
            'left_hip_roll_joint' : 0,
@@ -57,15 +56,15 @@ class TaksT1Cfg( LeggedRobotCfg ):
            'waist_yaw_joint' : 0.0,
            'waist_roll_joint' : 0.0,
            'waist_pitch_joint' : 0.0,
-           'left_shoulder_pitch_joint' : 0.16,
-           'left_shoulder_roll_joint' : 0.16,
+           'left_shoulder_pitch_joint' : 0.,
+           'left_shoulder_roll_joint' : 0.,
            'left_shoulder_yaw_joint' : 0.0,
            'left_elbow_joint' : 1.10,
            'left_wrist_roll_joint' : 0,
            'left_wrist_yaw_joint' : 0,
            'left_wrist_pitch_joint' : 0,
-           'right_shoulder_pitch_joint' : 0.16,
-           'right_shoulder_roll_joint' : -0.16,
+           'right_shoulder_pitch_joint' : 0.,
+           'right_shoulder_roll_joint' : 0.,
            'right_shoulder_yaw_joint' : 0.0,
            'right_elbow_joint' : 1.10,
            'right_wrist_roll_joint' : 0,
@@ -145,7 +144,7 @@ class TaksT1Cfg( LeggedRobotCfg ):
         left_thigh_name = 'left_hip_pitch'
         right_thigh_name = 'right_hip_pitch'
         foot_name = "ankle_roll"
-        penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'hip', 'neck', 'wrist']
+        penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'hip', 'neck']
         terminate_after_contacts_on = []
         self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
         flip_visual_attachments = False

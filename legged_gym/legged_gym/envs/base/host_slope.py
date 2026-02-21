@@ -1538,7 +1538,7 @@ class LeggedRobot(BaseTask):
         # import ipdb; ipdb.set_trace()
         wrist_dof = self.dof_pos[:, self.waist_joint_indices]
         reward = (torch.abs(wrist_dof) > 1.4).float()
-        return reward.sum(dim=-1)
+        return reward.squeeze(1)
 
     def _reward_hip_yaw_deviation(self):
         # import ipdb; ipdb.set_trace()
@@ -1705,7 +1705,7 @@ class LeggedRobot(BaseTask):
     def _reward_neck_deviation(self):
         neck_dof = self.dof_pos[:, self.neck_joint_indices]
         reward = (torch.abs(neck_dof) > 0.3).float()
-        return reward.sum(dim=-1)
+        return reward.squeeze(1)
 
 
     def _reward_feet_parallel(self):

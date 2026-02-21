@@ -209,9 +209,9 @@ class TaksT1Cfg( LeggedRobotCfg ):
         is_gaussian = True
         target_head_height = 1
         target_head_margin = 1
-        target_base_height_phase1 = 0.4
-        target_base_height_phase2 = 0.4
-        target_base_height_phase3 = 0.6
+        target_base_height_phase1 = 0.42
+        target_base_height_phase2 = 0.42
+        target_base_height_phase3 = 0.60
         orientation_threshold = 0.99
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2

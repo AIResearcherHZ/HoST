@@ -188,15 +188,14 @@ class OnPolicyRunner:
         wandb_log_dict = {}
         if locs['ep_infos']:
             for key in locs['ep_infos'][0]:
-                infotensor = torch.tensor([], device=self.device)
+                values = []
                 for ep_info in locs['ep_infos']:
-                    # handle scalar and zero dimensional tensor infos
-                    if not isinstance(ep_info[key], torch.Tensor):
-                        ep_info[key] = torch.Tensor([ep_info[key]])
-                    if len(ep_info[key].shape) == 0:
-                        ep_info[key] = ep_info[key].unsqueeze(0)
-                    infotensor = torch.cat((infotensor, ep_info[key].to(self.device)))
-                value = torch.mean(infotensor)
+                    v = ep_info[key]
+                    if isinstance(v, torch.Tensor):
+                        values.append(v.reshape(-1).float().mean().item())
+                    else:
+                        values.append(float(v))
+                value = torch.tensor(values, device=self.device).mean()
                 if self.logger_type == 'wandb':
                     wandb_log_dict['Episode/' + key] = value.item()
                 else:

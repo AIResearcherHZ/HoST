@@ -225,7 +225,7 @@ class LeggedRobot(BaseTask):
     
         # self._reset_motions(env_ids)
         self.extras['episode']["force"] = self.force.mean()
-        self.extras['episode']['action_scale'] = self.action_rescale
+        self.extras['episode']['action_scale'] = self.action_rescale.mean().item()
 
         # reset randomized prop
         if self.cfg.domain_rand.randomize_kp:
